@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Simple Online Store</title>
+<style>
+    body { font-family: Arial; margin: 20px; }
+    .item { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; width: 250px; }
+    .cart { margin-top: 30px; border-top: 2px solid #444; padding-top: 20px; }
+    button { padding: 6px 10px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<h1>Mini Online Store</h1>
+
+<div class="item">
+    <h3>Item A</h3>
+    <p>Price: NT$200</p>
+    <button onclick="addToCart('Item A', 200)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <h3>Item B</h3>
+    <p>Price: NT$350</p>
+    <button onclick="addToCart('Item B', 350)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <h3>Item C</h3>
+    <p>Price: NT$120</p>
+    <button onclick="addToCart('Item C', 120)">Add to Cart</button>
+</div>
+
+<div class="cart">
+    <h2>Your Cart</h2>
+    <ul id="cartList"></ul>
+    <p><strong>Total: NT$<span id="total">0</span></strong></p>
+
+    <h3>Payment Method</h3>
+    <p id="paymentRule">Cash only</p>
+
+    <button onclick="checkout()">Checkout</button>
+</div>
+
+<script>
+let cart = [];
+let total = 0;
+
+function addToCart(name, price) {
+    cart.push({ name, price });
+    total += price;
+    renderCart();
+    alert(name + " added to cart!");
+}
+
+function renderCart() {
+    const cartList = document.getElementById("cartList");
+    cartList.innerHTML = "";
+    cart.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = `${item.name} – NT$${item.price}`;
+        cartList.appendChild(li);
+    });
+    document.getElementById("total").textContent = total;
+
+    // Payment rules
+    if (total >= 500) {
+        document.getElementById("paymentRule").innerHTML =
+            "Cash Before Delivery (CBD)";
+    } else {
+        document.getElementById("paymentRule").innerHTML =
+            "Cash Only (Pay at delivery)";
+    }
+}
+
+function checkout() {
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    const orderText = cart.map(i => `${i.name} - NT$${i.price}`).join("%0A");
+    const subject = encodeURIComponent("New Store Order");
+    const body = encodeURIComponent(
+        `Order Details:%0A${orderText}%0A%0ATotal: NT$${total}%0APayment: ${total >= 500 ? "Cash Before Delivery" : "Cash Only"}`
+    );
+
+    const mailto = `mailto:leofoooo132@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = mailto;
+}
+</script>
+
+</body>
+</html>
