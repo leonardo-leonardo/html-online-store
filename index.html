@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Win7 Online Store</title>
+<title>Windows 7 Online Store - Enhanced</title>
 
 <style>
     body {
@@ -12,52 +12,63 @@
         padding: 0;
     }
 
-    /* Windows 7 Aero Header */
+    /* AERO HEADER */
     .header {
-        background: rgba(255,255,255,0.4);
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(6px);
+        background: rgba(255,255,255,0.45);
         border-bottom: 1px solid #a5b6d3;
-        padding: 20px;
+        padding: 22px;
         text-align: center;
-        font-size: 28px;
+        font-size: 30px;
         font-weight: bold;
         color: #1a3f7a;
         text-shadow: 0px 1px 2px white;
+        animation: fadeIn 0.6s ease;
     }
 
-    /* PAGE WRAPPER */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     .wrapper {
-        width: 1000px;
+        width: 1100px;
         margin: auto;
         margin-top: 20px;
     }
 
-    /* Windows 7 glass panel */
+    /* AERO PANEL */
     .panel {
-        background: rgba(255,255,255,0.85);
+        background: rgba(255,255,255,0.78);
         border: 1px solid #b8c6d9;
-        border-radius: 10px;
+        border-radius: 12px;
         padding: 20px;
         margin-bottom: 20px;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+        animation: aeroBlur 0.8s ease;
     }
 
-    /* ITEM CARDS */
+    @keyframes aeroBlur {
+        from { backdrop-filter: blur(0px); }
+        to { backdrop-filter: blur(6px); }
+    }
+
+    /* STORE ITEMS */
     .item {
-        width: 260px;
+        width: 270px;
         display: inline-block;
         vertical-align: top;
         margin: 15px;
         padding: 15px;
         background: white;
-        border-radius: 8px;
+        border-radius: 10px;
         border: 1px solid #d0d7e6;
         transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .item:hover {
         transform: scale(1.03);
-        box-shadow: 0px 0px 15px rgba(0,0,0,0.25);
+        box-shadow: 0px 0px 18px rgba(0,0,0,0.28);
     }
 
     .item h3 {
@@ -65,7 +76,7 @@
         color: #214f97;
     }
 
-    /* Windows 7 glossy button */
+    /* BUTTON (WIN7 STYLE) */
     button {
         background: linear-gradient(#ffffff, #e4e9f3);
         border: 1px solid #9caec9;
@@ -82,122 +93,184 @@
         border-color: #7c92b8;
     }
 
-    button:active {
-        transform: scale(0.97);
+    /* CART REMOVE BUTTON */
+    .remove-btn {
+        float: right;
+        background: #ffe5e5;
+        border: 1px solid #cc9b9b;
+        padding: 2px 8px;
+        border-radius: 4px;
     }
 
-    /* CART */
-    .cart-list li {
-        margin: 5px 0;
+    /* TASKBAR */
+    .taskbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 38px;
+        background: linear-gradient(#e7ecf5, #c3cedc);
+        border-top: 1px solid #a5b6d3;
+        box-shadow: 0px -2px 6px rgba(0,0,0,0.25);
+        display: flex;
+        align-items: center;
+        padding-left: 15px;
+        font-size: 15px;
+        color: #1c3d75;
     }
 
-    /* PAYMENT TEXT */
-    .payment {
-        font-weight: bold;
-        color: #003c74;
-        font-size: 16px;
+    /* SEARCH + CATEGORY */
+    .controls {
+        margin-bottom: 15px;
     }
-
 </style>
 </head>
 
 <body>
 
-<div class="header">🌟 Windows 7 Online Store 🌟</div>
+<!-- WINDOWS 7 DING SOUND (BASE64) -->
+<audio id="dingSound">
+    <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=" type="audio/wav">
+</audio>
+
+<div class="header">🌟 Windows 7 Online Store - Enhanced 🌟</div>
 
 <div class="wrapper">
 
-    <!-- STORE PANEL -->
+    <!-- SEARCH & CATEGORY -->
     <div class="panel">
-        <h2>Available Items</h2>
+        <div class="controls">
+            <input id="searchBox" type="text" placeholder="🔍 Search items..." style="padding:6px; width:200px;">
+            
+            <select id="categoryFilter" style="padding:6px;">
+                <option value="all">All Categories</option>
+                <option value="electronics">Electronics</option>
+                <option value="stationery">Stationery</option>
+                <option value="accessories">Accessories</option>
+            </select>
 
-        <!-- EXAMPLE ITEMS -->
-        <div class="item">
-            <h3>Logitech M330 Silent Mouse</h3>
-            <p>NT$450</p>
-            <button onclick="addToCart('Logitech M330 Silent Mouse', 450)">Add to Cart</button>
+            <button onclick="applyFilters()">Apply</button>
         </div>
+    </div>
 
-        <div class="item">
-            <h3>Anker PowerLine+ USB-C Cable</h3>
-            <p>NT$320</p>
-            <button onclick="addToCart('Anker PowerLine+ USB-C Cable', 320)">Add to Cart</button>
-        </div>
+    <!-- STORE ITEMS -->
+    <div class="panel" id="storePanel">
+        <h2>Items</h2>
 
-        <div class="item">
-            <h3>Xiaomi 10,000mAh Power Bank</h3>
-            <p>NT$399</p>
-            <button onclick="addToCart('Xiaomi 10,000mAh Power Bank', 399)">Add to Cart</button>
-        </div>
-
-        <div class="item">
-            <h3>Notebook A5 Hardcover</h3>
-            <p>NT$120</p>
-            <button onclick="addToCart('Notebook A5 Hardcover', 120)">Add to Cart</button>
-        </div>
-
-        <div class="item">
-            <h3>Pilot G-2 Pen Set (3 pcs)</h3>
-            <p>NT$95</p>
-            <button onclick="addToCart('Pilot G-2 Pen Set', 95)">Add to Cart</button>
-        </div>
-
-        <div class="item">
-            <h3>Stainless Thermal Bottle 500ml</h3>
-            <p>NT$280</p>
-            <button onclick="addToCart('Stainless Thermal Bottle 500ml', 280)">Add to Cart</button>
-        </div>
+        <!-- ITEMS WILL BE INSERTED DYNAMICALLY -->
+        <div id="itemContainer"></div>
     </div>
 
     <!-- CART PANEL -->
     <div class="panel">
         <h2>Your Cart</h2>
 
-        <ul id="cartList" class="cart-list"></ul>
+        <ul id="cartList"></ul>
 
         <p><strong>Total: NT$<span id="total">0</span></strong></p>
-
-        <p class="payment" id="paymentRule">Cash Only</p>
+        <p id="paymentRule" style="font-weight:bold; color:#003c74;">Cash Only</p>
 
         <button onclick="checkout()">Checkout</button>
     </div>
 
 </div>
 
+<!-- WINDOWS 7 TASKBAR -->
+<div class="taskbar">
+    🪟 Windows 7 Mode Active — Simple Store
+</div>
 
 <script>
+/* ---------------------------- ITEMS ---------------------------- */
+const items = [
+    { name: "Logitech M330 Silent Mouse", price: 450, category: "electronics" },
+    { name: "Anker PowerLine+ USB-C Cable", price: 320, category: "electronics" },
+    { name: "Xiaomi 10,000mAh Power Bank", price: 399, category: "electronics" },
+    { name: "Notebook A5 Hardcover", price: 120, category: "stationery" },
+    { name: "Pilot G-2 Pen Set (3 pcs)", price: 95, category: "stationery" },
+    { name: "Stainless Thermal Bottle 500ml", price: 280, category: "accessories" }
+];
+
 let cart = [];
 let total = 0;
 
+/* ------------------------ RENDER ITEMS ------------------------- */
+function renderItems(list) {
+    const box = document.getElementById("itemContainer");
+    box.innerHTML = "";
+
+    list.forEach(item => {
+        box.innerHTML += `
+        <div class="item">
+            <h3>${item.name}</h3>
+            <p>NT$${item.price}</p>
+            <label>Qty: </label>
+            <input type="number" id="qty_${item.name}" value="1" min="1" style="width:50px;">
+            <br><br>
+            <button onclick="addToCart('${item.name}', ${item.price})">Add to Cart</button>
+        </div>`;
+    });
+}
+
+renderItems(items);
+
+/* -------------------------- FILTERS --------------------------- */
+function applyFilters() {
+    const search = document.getElementById("searchBox").value.toLowerCase();
+    const category = document.getElementById("categoryFilter").value;
+
+    const result = items.filter(i =>
+        (category === "all" || i.category === category) &&
+        i.name.toLowerCase().includes(search)
+    );
+
+    renderItems(result);
+}
+
+/* ------------------------- CART LOGIC -------------------------- */
+
 function addToCart(name, price) {
-    cart.push({ name, price });
-    total += price;
+    const qty = parseInt(document.getElementById(`qty_${name}`).value);
+
+    for (let i = 0; i < qty; i++) {
+        cart.push({ name, price });
+        total += price;
+    }
+
+    document.getElementById("dingSound").play();
     renderCart();
 
-    // Win7 balloon-like popup
-    alert(name + " has been added to your cart!");
+    alert(`${qty} x ${name} added to cart!`);
 }
 
 function renderCart() {
     const cartList = document.getElementById("cartList");
     cartList.innerHTML = "";
 
-    cart.forEach(item => {
-        let li = document.createElement("li");
-        li.textContent = `${item.name} – NT$${item.price}`;
-        cartList.appendChild(li);
+    cart.forEach((item, index) => {
+        cartList.innerHTML += `
+        <li>
+            ${item.name} – NT$${item.price}
+            <button class="remove-btn" onclick="removeItem(${index})">x</button>
+        </li>`;
     });
 
     document.getElementById("total").textContent = total;
 
     if (total >= 500) {
-        document.getElementById("paymentRule").textContent =
-            "Cash Before Delivery (NT$500+)";
+        paymentRule.textContent = "Cash Before Delivery (NT$500+)";
     } else {
-        document.getElementById("paymentRule").textContent =
-            "Cash Only (Pay on delivery)";
+        paymentRule.textContent = "Cash Only (Pay on delivery)";
     }
 }
+
+function removeItem(index) {
+    total -= cart[index].price;
+    cart.splice(index, 1);
+    renderCart();
+}
+
+/* ------------------------- CHECKOUT ---------------------------- */
 
 function checkout() {
     if (cart.length === 0) {
@@ -206,18 +279,17 @@ function checkout() {
     }
 
     const orderText = cart.map(i => `${i.name} - NT$${i.price}`).join("%0A");
-    const subject = encodeURIComponent("New Order From Your Store");
+
+    const subject = encodeURIComponent("New Order");
     const body = encodeURIComponent(
-        `Order Details:%0A${orderText}%0A%0A` +
-        `Total: NT$${total}%0A` +
+        `Order Details:%0A${orderText}%0A%0ATotal: NT$${total}%0A` +
         `Payment: ${total >= 500 ? "Cash Before Delivery" : "Cash Only"}`
     );
 
-    // sends to your email
-    const mailto = `mailto:leofoooo132@gmail.com?subject=${subject}&body=${body}`;
-    window.location.href = mailto;
+    window.location.href =
+        `mailto:leofoooo132@gmail.com?subject=${subject}&body=${body}`;
 }
-</script>
 
+</script>
 </body>
 </html>
