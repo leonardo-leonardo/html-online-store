@@ -2,235 +2,187 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Windows 7 Online Store - Enhanced</title>
+<title>Windows 7 Store</title>
 
 <style>
-    body {
-        font-family: Segoe UI, Arial;
-        background: linear-gradient(#cdd9ee, #f0f4fa);
-        margin: 0;
-        padding: 0;
-    }
+/* --- Windows 7 Aesthetic --- */
 
-    /* AERO HEADER */
-    .header {
-        backdrop-filter: blur(6px);
-        background: rgba(255,255,255,0.45);
-        border-bottom: 1px solid #a5b6d3;
-        padding: 22px;
-        text-align: center;
-        font-size: 30px;
-        font-weight: bold;
-        color: #1a3f7a;
-        text-shadow: 0px 1px 2px white;
-        animation: fadeIn 0.6s ease;
-    }
+body {
+    font-family: Segoe UI, Arial;
+    background: linear-gradient(#2a69d0, #1a4c9c);
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+/* Glass / Aero effect */
+.glass {
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.18);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 20px;
+    color: #000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
 
-    .wrapper {
-        width: 1100px;
-        margin: auto;
-        margin-top: 20px;
-    }
+/* Search bar */
+#searchBar {
+    width: 300px;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.4);
+}
 
-    /* AERO PANEL */
-    .panel {
-        background: rgba(255,255,255,0.78);
-        border: 1px solid #b8c6d9;
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-        animation: aeroBlur 0.8s ease;
-    }
+/* Category */
+select {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.4);
+}
 
-    @keyframes aeroBlur {
-        from { backdrop-filter: blur(0px); }
-        to { backdrop-filter: blur(6px); }
-    }
+/* Item card */
+.item {
+    width: 260px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 12px;
+    padding: 12px;
+    margin: 15px;
+    display: inline-block;
+    vertical-align: top;
+    color: #000;
+    backdrop-filter: blur(10px);
+}
 
-    /* STORE ITEMS */
-    .item {
-        width: 270px;
-        display: inline-block;
-        vertical-align: top;
-        margin: 15px;
-        padding: 15px;
-        background: white;
-        border-radius: 10px;
-        border: 1px solid #d0d7e6;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
+.item img {
+    width: 240px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+}
 
-    .item:hover {
-        transform: scale(1.03);
-        box-shadow: 0px 0px 18px rgba(0,0,0,0.28);
-    }
+/* Buttons */
+button {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(#e8f0ff, #b8ccf0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
 
-    .item h3 {
-        margin: 0 0 10px 0;
-        color: #214f97;
-    }
+button:hover {
+    background: linear-gradient(#ffffff, #d0e0ff);
+}
 
-    /* BUTTON (WIN7 STYLE) */
-    button {
-        background: linear-gradient(#ffffff, #e4e9f3);
-        border: 1px solid #9caec9;
-        border-radius: 6px;
-        padding: 7px 14px;
-        cursor: pointer;
-        font-size: 14px;
-        box-shadow: inset 0 1px 1px white;
-        transition: 0.2s;
-    }
+/* Cart */
+#cart {
+    margin-top: 20px;
+}
 
-    button:hover {
-        background: linear-gradient(#f6faff, #d7e2f5);
-        border-color: #7c92b8;
-    }
-
-    /* CART REMOVE BUTTON */
-    .remove-btn {
-        float: right;
-        background: #ffe5e5;
-        border: 1px solid #cc9b9b;
-        padding: 2px 8px;
-        border-radius: 4px;
-    }
-
-    /* TASKBAR */
-    .taskbar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 38px;
-        background: linear-gradient(#e7ecf5, #c3cedc);
-        border-top: 1px solid #a5b6d3;
-        box-shadow: 0px -2px 6px rgba(0,0,0,0.25);
-        display: flex;
-        align-items: center;
-        padding-left: 15px;
-        font-size: 15px;
-        color: #1c3d75;
-    }
-
-    /* SEARCH + CATEGORY */
-    .controls {
-        margin-bottom: 15px;
-    }
+/* Windows 7 Taskbar */
+#taskbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: rgba(20,20,20,0.6);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+}
 </style>
-</head>
 
+</head>
 <body>
 
-<!-- WINDOWS 7 DING SOUND (BASE64) -->
-<audio id="dingSound">
-    <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=" type="audio/wav">
-</audio>
-
-<div class="header">🌟 Windows 7 Online Store - Enhanced 🌟</div>
-
-<div class="wrapper">
-
-    <!-- SEARCH & CATEGORY -->
-    <div class="panel">
-        <div class="controls">
-            <input id="searchBox" type="text" placeholder="🔍 Search items..." style="padding:6px; width:200px;">
-            
-            <select id="categoryFilter" style="padding:6px;">
-                <option value="all">All Categories</option>
-                <option value="electronics">Electronics</option>
-                <option value="stationery">Stationery</option>
-                <option value="accessories">Accessories</option>
-            </select>
-
-            <button onclick="applyFilters()">Apply</button>
-        </div>
-    </div>
-
-    <!-- STORE ITEMS -->
-    <div class="panel" id="storePanel">
-        <h2>Items</h2>
-
-        <!-- ITEMS WILL BE INSERTED DYNAMICALLY -->
-        <div id="itemContainer"></div>
-    </div>
-
-    <!-- CART PANEL -->
-    <div class="panel">
-        <h2>Your Cart</h2>
-
-        <ul id="cartList"></ul>
-
-        <p><strong>Total: NT$<span id="total">0</span></strong></p>
-        <p id="paymentRule" style="font-weight:bold; color:#003c74;">Cash Only</p>
-
-        <button onclick="checkout()">Checkout</button>
-    </div>
-
+<!-- Windows 7 Taskbar -->
+<div id="taskbar">
+    🪟 Windows 7 Store — Classic Mode Enabled
 </div>
 
-<!-- WINDOWS 7 TASKBAR -->
-<div class="taskbar">
-    🪟 Windows 7 Mode Active — Simple Store
+<div class="glass" style="margin: 20px;">
+    <h1>🛒 Windows 7 Mini Store</h1>
+
+    <!-- Search + Category -->
+    <input type="text" id="searchBar" placeholder="Search items..." onkeyup="renderItems()">
+    <select id="categorySelect" onchange="renderItems()">
+        <option value="all">All Categories</option>
+        <option value="stationery">Stationery</option>
+        <option value="electronics">Electronics</option>
+    </select>
 </div>
+
+<!-- Store Inventory -->
+<div id="itemsContainer" class="glass" style="margin: 20px;"></div>
+
+<!-- Cart -->
+<div id="cart" class="glass" style="margin: 20px;">
+    <h2>Your Cart</h2>
+    <ul id="cartList"></ul>
+    <p><strong>Total: NT$<span id="total">0</span></strong></p>
+    <p><strong>Payment: <span id="paymentRule">Cash Only</span></strong></p>
+    <button onclick="checkout()">Checkout</button>
+</div>
+
+<!-- Windows 7 Ding Sound -->
+<audio id="dingSound" src="https://www.myinstants.com/media/sounds/windows-ding.mp3"></audio>
 
 <script>
-/* ---------------------------- ITEMS ---------------------------- */
+/* Items Data */
 const items = [
-    { name: "Logitech M330 Silent Mouse", price: 450, category: "electronics" },
-    { name: "Anker PowerLine+ USB-C Cable", price: 320, category: "electronics" },
-    { name: "Xiaomi 10,000mAh Power Bank", price: 399, category: "electronics" },
-    { name: "Notebook A5 Hardcover", price: 120, category: "stationery" },
-    { name: "Pilot G-2 Pen Set (3 pcs)", price: 95, category: "stationery" },
-    { name: "Stainless Thermal Bottle 500ml", price: 280, category: "accessories" }
+    {
+        name: "Sticky Notes",
+        price: 50,
+        category: "stationery",
+        img: "https://softwaretested.com/wp-content/uploads/2019/05/Sticky-Notes.png"
+    },
+    {
+        name: "Cheap Silent Mouse",
+        price: 150,
+        category: "electronics",
+        img: "https://m.media-amazon.com/images/S/aplus-media/vc/7ecce7bc-e939-4ccd-87ec-570d7cc95f9a.jpg"
+    }
 ];
 
 let cart = [];
 let total = 0;
 
-/* ------------------------ RENDER ITEMS ------------------------- */
-function renderItems(list) {
-    const box = document.getElementById("itemContainer");
-    box.innerHTML = "";
+/* Render Items */
+function renderItems() {
+    const container = document.getElementById("itemsContainer");
+    container.innerHTML = "";
 
-    list.forEach(item => {
-        box.innerHTML += `
-        <div class="item">
-            <h3>${item.name}</h3>
-            <p>NT$${item.price}</p>
-            <label>Qty: </label>
-            <input type="number" id="qty_${item.name}" value="1" min="1" style="width:50px;">
-            <br><br>
-            <button onclick="addToCart('${item.name}', ${item.price})">Add to Cart</button>
-        </div>`;
-    });
+    const search = document.getElementById("searchBar").value.toLowerCase();
+    const category = document.getElementById("categorySelect").value;
+
+    items
+        .filter(item =>
+            (category === "all" || item.category === category) &&
+            item.name.toLowerCase().includes(search)
+        )
+        .forEach(item => {
+            container.innerHTML += `
+                <div class="item">
+                    <img src="${item.img}">
+                    <h3>${item.name}</h3>
+                    <p>Price: NT$${item.price}</p>
+                    Quantity: 
+                    <input type="number" id="qty-${item.name}" value="1" min="1" style="width:50px;">
+                    <br><br>
+                    <button onclick="addToCart('${item.name}', ${item.price})">Add to Cart</button>
+                </div>
+            `;
+        });
 }
 
-renderItems(items);
-
-/* -------------------------- FILTERS --------------------------- */
-function applyFilters() {
-    const search = document.getElementById("searchBox").value.toLowerCase();
-    const category = document.getElementById("categoryFilter").value;
-
-    const result = items.filter(i =>
-        (category === "all" || i.category === category) &&
-        i.name.toLowerCase().includes(search)
-    );
-
-    renderItems(result);
-}
-
-/* ------------------------- CART LOGIC -------------------------- */
-
+/* Add to Cart */
 function addToCart(name, price) {
-    const qty = parseInt(document.getElementById(`qty_${name}`).value);
+    const qty = parseInt(document.getElementById("qty-" + name).value);
 
     for (let i = 0; i < qty; i++) {
         cart.push({ name, price });
@@ -239,57 +191,51 @@ function addToCart(name, price) {
 
     document.getElementById("dingSound").play();
     renderCart();
-
-    alert(`${qty} x ${name} added to cart!`);
 }
 
+/* Render Cart */
 function renderCart() {
-    const cartList = document.getElementById("cartList");
-    cartList.innerHTML = "";
+    const list = document.getElementById("cartList");
+    list.innerHTML = "";
 
     cart.forEach((item, index) => {
-        cartList.innerHTML += `
-        <li>
-            ${item.name} – NT$${item.price}
-            <button class="remove-btn" onclick="removeItem(${index})">x</button>
-        </li>`;
+        list.innerHTML += `
+            <li>${item.name} – NT$${item.price} 
+                <button onclick="removeItem(${index})">❌</button>
+            </li>`;
     });
 
-    document.getElementById("total").textContent = total;
+    document.getElementById("total").innerText = total;
 
-    if (total >= 500) {
-        paymentRule.textContent = "Cash Before Delivery (NT$500+)";
-    } else {
-        paymentRule.textContent = "Cash Only (Pay on delivery)";
-    }
+    // Payment rule
+    document.getElementById("paymentRule").innerText =
+        total >= 500 ? "Cash Before Delivery" : "Cash Only";
 }
 
-function removeItem(index) {
-    total -= cart[index].price;
-    cart.splice(index, 1);
+/* Remove item */
+function removeItem(i) {
+    total -= cart[i].price;
+    cart.splice(i, 1);
     renderCart();
 }
 
-/* ------------------------- CHECKOUT ---------------------------- */
-
+/* Checkout using mailto */
 function checkout() {
     if (cart.length === 0) {
-        alert("Your cart is empty!");
+        alert("Cart is empty!");
         return;
     }
 
-    const orderText = cart.map(i => `${i.name} - NT$${i.price}`).join("%0A");
-
-    const subject = encodeURIComponent("New Order");
-    const body = encodeURIComponent(
-        `Order Details:%0A${orderText}%0A%0ATotal: NT$${total}%0A` +
-        `Payment: ${total >= 500 ? "Cash Before Delivery" : "Cash Only"}`
-    );
+    const order = cart.map(i => `${i.name} - NT$${i.price}`).join("%0A");
+    const payment = total >= 500 ? "Cash Before Delivery" : "Cash Only";
 
     window.location.href =
-        `mailto:leofoooo132@gmail.com?subject=${subject}&body=${body}`;
+        `mailto:leofoooo132@gmail.com?subject=New Order&body=Order:%0A${order}%0A%0ATotal: NT$${total}%0APayment: ${payment}`;
 }
 
+/* Load items on start */
+renderItems();
 </script>
+
 </body>
 </html>
