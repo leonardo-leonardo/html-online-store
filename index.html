@@ -133,7 +133,7 @@ button:hover {
 <audio id="dingSound" src="https://www.myinstants.com/media/sounds/windows-ding.mp3"></audio>
 
 <script>
-/* Items Data */
+/* Items Data — ONLY YOUR ITEMS */
 const items = [
     {
         name: "Sticky Notes",
@@ -207,7 +207,6 @@ function renderCart() {
 
     document.getElementById("total").innerText = total;
 
-    // Payment rule
     document.getElementById("paymentRule").innerText =
         total >= 500 ? "Cash Before Delivery" : "Cash Only";
 }
@@ -219,7 +218,7 @@ function removeItem(i) {
     renderCart();
 }
 
-/* Checkout using mailto */
+/* Checkout via mailto */
 function checkout() {
     if (cart.length === 0) {
         alert("Cart is empty!");
@@ -233,7 +232,6 @@ function checkout() {
         `mailto:leofoooo132@gmail.com?subject=New Order&body=Order:%0A${order}%0A%0ATotal: NT$${total}%0APayment: ${payment}`;
 }
 
-/* Load items on start */
 renderItems();
 </script>
 
