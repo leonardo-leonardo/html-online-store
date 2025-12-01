@@ -2,46 +2,168 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Simple Online Store</title>
+<title>Win7 Online Store</title>
+
 <style>
-    body { font-family: Arial; margin: 20px; }
-    .item { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; width: 250px; }
-    .cart { margin-top: 30px; border-top: 2px solid #444; padding-top: 20px; }
-    button { padding: 6px 10px; cursor: pointer; }
+    body {
+        font-family: Segoe UI, Arial;
+        background: linear-gradient(#cdd9ee, #f0f4fa);
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Windows 7 Aero Header */
+    .header {
+        background: rgba(255,255,255,0.4);
+        backdrop-filter: blur(4px);
+        border-bottom: 1px solid #a5b6d3;
+        padding: 20px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: #1a3f7a;
+        text-shadow: 0px 1px 2px white;
+    }
+
+    /* PAGE WRAPPER */
+    .wrapper {
+        width: 1000px;
+        margin: auto;
+        margin-top: 20px;
+    }
+
+    /* Windows 7 glass panel */
+    .panel {
+        background: rgba(255,255,255,0.85);
+        border: 1px solid #b8c6d9;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+
+    /* ITEM CARDS */
+    .item {
+        width: 260px;
+        display: inline-block;
+        vertical-align: top;
+        margin: 15px;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #d0d7e6;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .item:hover {
+        transform: scale(1.03);
+        box-shadow: 0px 0px 15px rgba(0,0,0,0.25);
+    }
+
+    .item h3 {
+        margin: 0 0 10px 0;
+        color: #214f97;
+    }
+
+    /* Windows 7 glossy button */
+    button {
+        background: linear-gradient(#ffffff, #e4e9f3);
+        border: 1px solid #9caec9;
+        border-radius: 6px;
+        padding: 7px 14px;
+        cursor: pointer;
+        font-size: 14px;
+        box-shadow: inset 0 1px 1px white;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: linear-gradient(#f6faff, #d7e2f5);
+        border-color: #7c92b8;
+    }
+
+    button:active {
+        transform: scale(0.97);
+    }
+
+    /* CART */
+    .cart-list li {
+        margin: 5px 0;
+    }
+
+    /* PAYMENT TEXT */
+    .payment {
+        font-weight: bold;
+        color: #003c74;
+        font-size: 16px;
+    }
+
 </style>
 </head>
+
 <body>
 
-<h1>Mini Online Store</h1>
+<div class="header">🌟 Windows 7 Online Store 🌟</div>
 
-<div class="item">
-    <h3>Item A</h3>
-    <p>Price: NT$200</p>
-    <button onclick="addToCart('Item A', 200)">Add to Cart</button>
+<div class="wrapper">
+
+    <!-- STORE PANEL -->
+    <div class="panel">
+        <h2>Available Items</h2>
+
+        <!-- EXAMPLE ITEMS -->
+        <div class="item">
+            <h3>Logitech M330 Silent Mouse</h3>
+            <p>NT$450</p>
+            <button onclick="addToCart('Logitech M330 Silent Mouse', 450)">Add to Cart</button>
+        </div>
+
+        <div class="item">
+            <h3>Anker PowerLine+ USB-C Cable</h3>
+            <p>NT$320</p>
+            <button onclick="addToCart('Anker PowerLine+ USB-C Cable', 320)">Add to Cart</button>
+        </div>
+
+        <div class="item">
+            <h3>Xiaomi 10,000mAh Power Bank</h3>
+            <p>NT$399</p>
+            <button onclick="addToCart('Xiaomi 10,000mAh Power Bank', 399)">Add to Cart</button>
+        </div>
+
+        <div class="item">
+            <h3>Notebook A5 Hardcover</h3>
+            <p>NT$120</p>
+            <button onclick="addToCart('Notebook A5 Hardcover', 120)">Add to Cart</button>
+        </div>
+
+        <div class="item">
+            <h3>Pilot G-2 Pen Set (3 pcs)</h3>
+            <p>NT$95</p>
+            <button onclick="addToCart('Pilot G-2 Pen Set', 95)">Add to Cart</button>
+        </div>
+
+        <div class="item">
+            <h3>Stainless Thermal Bottle 500ml</h3>
+            <p>NT$280</p>
+            <button onclick="addToCart('Stainless Thermal Bottle 500ml', 280)">Add to Cart</button>
+        </div>
+    </div>
+
+    <!-- CART PANEL -->
+    <div class="panel">
+        <h2>Your Cart</h2>
+
+        <ul id="cartList" class="cart-list"></ul>
+
+        <p><strong>Total: NT$<span id="total">0</span></strong></p>
+
+        <p class="payment" id="paymentRule">Cash Only</p>
+
+        <button onclick="checkout()">Checkout</button>
+    </div>
+
 </div>
 
-<div class="item">
-    <h3>Item B</h3>
-    <p>Price: NT$350</p>
-    <button onclick="addToCart('Item B', 350)">Add to Cart</button>
-</div>
-
-<div class="item">
-    <h3>Item C</h3>
-    <p>Price: NT$120</p>
-    <button onclick="addToCart('Item C', 120)">Add to Cart</button>
-</div>
-
-<div class="cart">
-    <h2>Your Cart</h2>
-    <ul id="cartList"></ul>
-    <p><strong>Total: NT$<span id="total">0</span></strong></p>
-
-    <h3>Payment Method</h3>
-    <p id="paymentRule">Cash only</p>
-
-    <button onclick="checkout()">Checkout</button>
-</div>
 
 <script>
 let cart = [];
@@ -51,26 +173,29 @@ function addToCart(name, price) {
     cart.push({ name, price });
     total += price;
     renderCart();
-    alert(name + " added to cart!");
+
+    // Win7 balloon-like popup
+    alert(name + " has been added to your cart!");
 }
 
 function renderCart() {
     const cartList = document.getElementById("cartList");
     cartList.innerHTML = "";
+
     cart.forEach(item => {
         let li = document.createElement("li");
         li.textContent = `${item.name} – NT$${item.price}`;
         cartList.appendChild(li);
     });
+
     document.getElementById("total").textContent = total;
 
-    // Payment rules
     if (total >= 500) {
-        document.getElementById("paymentRule").innerHTML =
-            "Cash Before Delivery (CBD)";
+        document.getElementById("paymentRule").textContent =
+            "Cash Before Delivery (NT$500+)";
     } else {
-        document.getElementById("paymentRule").innerHTML =
-            "Cash Only (Pay at delivery)";
+        document.getElementById("paymentRule").textContent =
+            "Cash Only (Pay on delivery)";
     }
 }
 
@@ -81,11 +206,14 @@ function checkout() {
     }
 
     const orderText = cart.map(i => `${i.name} - NT$${i.price}`).join("%0A");
-    const subject = encodeURIComponent("New Store Order");
+    const subject = encodeURIComponent("New Order From Your Store");
     const body = encodeURIComponent(
-        `Order Details:%0A${orderText}%0A%0ATotal: NT$${total}%0APayment: ${total >= 500 ? "Cash Before Delivery" : "Cash Only"}`
+        `Order Details:%0A${orderText}%0A%0A` +
+        `Total: NT$${total}%0A` +
+        `Payment: ${total >= 500 ? "Cash Before Delivery" : "Cash Only"}`
     );
 
+    // sends to your email
     const mailto = `mailto:leofoooo132@gmail.com?subject=${subject}&body=${body}`;
     window.location.href = mailto;
 }
