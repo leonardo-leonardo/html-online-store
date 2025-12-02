@@ -6,7 +6,6 @@
 
 <style>
 /* --- Windows 7 Aesthetic --- */
-
 body {
     font-family: Segoe UI, Arial;
     background: linear-gradient(#2a69d0, #1a4c9c);
@@ -54,8 +53,13 @@ select {
     vertical-align: top;
     color: #000;
     backdrop-filter: blur(10px);
+    transition: 0.2s;
+}
+.item:hover {
+    transform: scale(1.05);
 }
 
+/* Item image */
 .item img {
     width: 240px;
     height: 180px;
@@ -70,9 +74,8 @@ button {
     border: none;
     cursor: pointer;
     background: linear-gradient(#e8f0ff, #b8ccf0);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 0 6px rgba(255,255,255,0.6);
 }
-
 button:hover {
     background: linear-gradient(#ffffff, #d0e0ff);
 }
@@ -96,7 +99,6 @@ button:hover {
     font-size: 18px;
 }
 </style>
-
 </head>
 <body>
 
@@ -114,6 +116,7 @@ button:hover {
         <option value="all">All Categories</option>
         <option value="stationery">Stationery</option>
         <option value="electronics">Electronics</option>
+        <option value="software">Software</option>
     </select>
 </div>
 
@@ -133,7 +136,7 @@ button:hover {
 <audio id="dingSound" src="https://www.myinstants.com/media/sounds/windows-ding.mp3"></audio>
 
 <script>
-/* Items Data — ONLY YOUR ITEMS */
+/* Items Data — Expanded Inventory */
 const items = [
     {
         name: "Sticky Notes",
@@ -146,6 +149,18 @@ const items = [
         price: 150,
         category: "electronics",
         img: "https://m.media-amazon.com/images/S/aplus-media/vc/7ecce7bc-e939-4ccd-87ec-570d7cc95f9a.jpg"
+    },
+    {
+        name: "Windows XP CD",
+        price: 300,
+        category: "software",
+        img: "https://upload.wikimedia.org/wikipedia/en/5/5f/Windows_XP_SP3_CD.png"
+    },
+    {
+        name: "Retro Keyboard",
+        price: 800,
+        category: "electronics",
+        img: "https://upload.wikimedia.org/wikipedia/commons/5/5e/IBM_Model_M_keyboard.jpg"
     }
 ];
 
@@ -180,17 +195,21 @@ function renderItems() {
         });
 }
 
-/* Add to Cart */
+/* Add to Cart with Quantity Handling */
 function addToCart(name, price) {
     const qty = parseInt(document.getElementById("qty-" + name).value);
+    const existing = cart.find(i => i.name === name);
 
-    for (let i = 0; i < qty; i++) {
-        cart.push({ name, price });
-        total += price;
+    if (existing) {
+        existing.qty += qty;
+    } else {
+        cart.push({ name, price, qty });
     }
 
+    total += price * qty;
     document.getElementById("dingSound").play();
     renderCart();
+    saveCart();
 }
 
 /* Render Cart */
@@ -200,22 +219,22 @@ function renderCart() {
 
     cart.forEach((item, index) => {
         list.innerHTML += `
-            <li>${item.name} – NT$${item.price} 
+            <li>${item.name} – NT$${item.price} × ${item.qty}
                 <button onclick="removeItem(${index})">❌</button>
             </li>`;
     });
 
     document.getElementById("total").innerText = total;
-
     document.getElementById("paymentRule").innerText =
         total >= 500 ? "Cash Before Delivery" : "Cash Only";
 }
 
 /* Remove item */
 function removeItem(i) {
-    total -= cart[i].price;
+    total -= cart[i].price * cart[i].qty;
     cart.splice(i, 1);
     renderCart();
+    saveCart();
 }
 
 /* Checkout via mailto */
@@ -225,13 +244,27 @@ function checkout() {
         return;
     }
 
-    const order = cart.map(i => `${i.name} - NT$${i.price}`).join("%0A");
+    const order = cart.map(i => `${i.name} × ${i.qty} - NT$${i.price * i.qty}`).join("%0A");
     const payment = total >= 500 ? "Cash Before Delivery" : "Cash Only";
 
     window.location.href =
         `mailto:leofoooo132@gmail.com?subject=New Order&body=Order:%0A${order}%0A%0ATotal: NT$${total}%0APayment: ${payment}`;
 }
 
+/* Persistence with localStorage */
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("total", total);
+}
+function loadCart() {
+    const savedCart = localStorage.getItem("cart");
+    const savedTotal = localStorage.getItem("total");
+    if (savedCart) cart = JSON.parse(savedCart);
+    if (savedTotal) total = parseInt(savedTotal);
+    renderCart();
+}
+
+loadCart();
 renderItems();
 </script>
 
