@@ -117,6 +117,8 @@ button:hover {
         <option value="stationery">Stationery</option>
         <option value="electronics">Electronics</option>
         <option value="software">Software</option>
+        <option value="games">Games</option>
+        <option value="optimizing">Optimizing</option>
     </select>
 </div>
 
@@ -136,33 +138,32 @@ button:hover {
 <audio id="dingSound" src="https://www.myinstants.com/media/sounds/windows-ding.mp3"></audio>
 
 <script>
-/* Items Data — Expanded Inventory */
+/* Items Data — Fixed Categories + Error */
 const items = [
     {
         name: "Flappy Bird Game",
         price: 5,
-        category: "Games",
-        img: "https://th.bing.com/th/id/R.567e72625ae82468e5116ce92dc24bde?rik=kqrAxxOrUhrXPg&riu=http%3a%2f%2fassets1.ignimgs.com%2f2014%2f01%2f31%2fflappy-bird-buttonjpg-e984c2.jpg&ehk=vGlEeny7R2EyaMcNMlj4nt4YJPLB2BBtN8wG2799dWE%3d&risl=&pid=ImgRaw&r=0
+        category: "games",
+        img: "https://th.bing.com/th/id/R.567e72625ae82468e5116ce92dc24bde?rik=kqrAxxOrUhrXPg&riu=http%3a%2f%2fassets1.ignimgs.com%2f2014%2f01%2f31%2fflappy-bird-buttonjpg-e984c2.jpg&ehk=vGlEeny7R2EyaMcNMlj4nt4YJPLB2BBtN8wG2799dWE%3d&risl=&pid=ImgRaw&r=0"
     },
     {
-        name: "Optimizing your laptop-Better Performance ONLY(Windows OS)",
+        name: "Optimizing your laptop — Better Performance (Windows OS)",
         price: 100,
-        category: "Optmizing",
+        category: "optimizing",
         img: "https://mirillis.com/blog/wp-content/uploads/2017/10/Increase-PC-Speed-1250x917.jpg"
     },
     {
-        name: "Optimizing your laptop-Less storage usage ONLY(Windows OS)",
+        name: "Optimizing your laptop — Less Storage Usage (Windows OS)",
         price: 100,
-        category: "Optmizing",
+        category: "optimizing",
         img: "https://iphonewired.com/wp-content/uploads/2022/11/1669772263_maxresdefault.jpg"
     },
     {
-        name: "Optimising your laptop-Power saving ONLY(Windows OS)",
+        name: "Optimizing your laptop — Power Saving (Windows OS)",
         price: 50,
-        category: "Optmizing",
+        category: "optimizing",
         img: "https://static1.howtogeekimages.com/wordpress/wp-content/uploads/2021/09/battery_saver_hero_3.jpg"
-    },
-    
+    }
 ];
 
 let cart = [];
@@ -252,22 +253,4 @@ function checkout() {
         `mailto:leofoooo132@gmail.com?subject=New Order&body=Order:%0A${order}%0A%0ATotal: NT$${total}%0APayment: ${payment}`;
 }
 
-/* Persistence with localStorage */
-function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    localStorage.setItem("total", total);
-}
-function loadCart() {
-    const savedCart = localStorage.getItem("cart");
-    const savedTotal = localStorage.getItem("total");
-    if (savedCart) cart = JSON.parse(savedCart);
-    if (savedTotal) total = parseInt(savedTotal);
-    renderCart();
-}
-
-loadCart();
-renderItems();
-</script>
-
-</body>
-</html>
+/* Persistence with localStorage
