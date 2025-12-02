@@ -7,18 +7,18 @@ import io
 st.set_page_config(page_title="🛒 Common Store", layout="wide")
 st.title("🏪 Common Store - Browse Items")
 
-# --- CATEGORIES (EMPTY ITEMS) ---
-categories = ["Electronics", "Stationery", "Accessories", "Clothing", "Kitchen", "Sports", "Toys"]
+# --- CATEGORIES ---
+categories = ["Games"]
 
-# Each category has **zero** items
+# --- ITEMS (ONLY 1 ITEM ADDED) ---
 items = {
-    "Electronics": [],
-    "Stationery": [],
-    "Accessories": [],
-    "Clothing": [],
-    "Kitchen": [],
-    "Sports": [],
-    "Toys": []
+    "Games": [
+        {
+            "name": "Flappy Bird",
+            "price": 0,
+            "image": None  # add image later
+        }
+    ]
 }
 
 # --- SESSION STATE ---
@@ -66,8 +66,18 @@ with st.sidebar:
 
         st.button("Checkout")
 
-# --- ITEM DISPLAY (EMPTY) ---
+# --- DISPLAY ITEMS ---
 show_popup()
 
-st.write("⚠️ No items available yet. Add your own items to begin selling!")
-st.info("Your store is clean and ready — add items manually in the `items` dictionary.")
+for category in categories:
+    st.subheader(category)
+    col = st.columns(3)
+
+    for i, item in enumerate(items[category]):
+        with col[i % 3]:
+            st.write(f"### {item['name']}")
+            st.write(f"**Price:** ${item['price']}")
+
+            st.button("Add to Cart", key=f"{category}_{i}",
+                      on_click=add_to_cart,
+                      args=(item["name"], item["price"]))
