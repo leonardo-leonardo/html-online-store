@@ -1,83 +1,79 @@
-import streamlit as st
-import random
-from PIL import Image, ImageDraw, ImageFont
-import io
+<script>
+/* Items Data — NOW EMPTY */
+const items = [];
 
-# --- PAGE CONFIG ---
-st.set_page_config(page_title="🛒 Common Store", layout="wide")
-st.title("🏪 Common Store - Browse Items")
+/* Cart Storage */
+let cart = []; // each entry: { name, price, qty }
 
-# --- CATEGORIES ---
-categories = ["Games"]
+/* Add to Cart */
+function addToCart(name, price) {
+    const qty = parseInt(document.getElementById("qty-" + name).value);
 
-# --- ITEMS (ONLY 1 ITEM ADDED) ---
-items = {
-    "Games": [
-        {
-            "name": "Flappy Bird",
-            "price": 0,
-            "image": None  # add image later
-        }
-    ]
+    const existing = cart.find(i => i.name === name);
+
+    if (existing) {
+        existing.qty += qty;
+    } else {
+        cart.push({ name, price, qty });
+    }
+
+    document.getElementById("dingSound").play();
+    renderCart();
 }
 
-# --- SESSION STATE ---
-if "cart" not in st.session_state:
-    st.session_state.cart = {}
+/* Render Cart (grouped!) */
+function renderCart() {
+    const list = document.getElementById("cartList");
+    list.innerHTML = "";
 
-if "popup" not in st.session_state:
-    st.session_state.popup = ""
+    total = 0;
 
-# --- FUNCTIONS ---
-def add_to_cart(name, price):
-    if name not in st.session_state.cart:
-        st.session_state.cart[name] = {"price": price, "qty": 1}
-    else:
-        st.session_state.cart[name]["qty"] += 1
+    cart.forEach((item, index) => {
+        const subtotal = item.price * item.qty;
+        total += subtotal;
 
-    st.session_state.popup = f"✅ Added **{name}** to cart!"
-    st.experimental_rerun()
+        list.innerHTML += `
+            <li>
+                ${item.name} — NT$${item.price} × ${item.qty}
+                <button onclick="removeItem(${index})">❌</button>
+            </li>
+        `;
+    });
 
-def show_popup():
-    if st.session_state.popup:
-        st.success(st.session_state.popup)
-        st.session_state.popup = ""
+    document.getElementById("total").innerText = total;
 
-# --- SIDEBAR CART ---
-with st.sidebar:
-    st.header("🛒 Cart")
-    
-    if not st.session_state.cart:
-        st.write("Your cart is empty.")
-    else:
-        total = 0
-        for item, info in st.session_state.cart.items():
-            st.write(f"**{item}** — ${info['price']} × {info['qty']}")
-            total += info["price"] * info["qty"]
+    document.getElementById("paymentRule").innerText =
+        total >= 500 ? "Cash Before Delivery" : "Cash Only";
+}
 
-        st.write("---")
-        st.subheader(f"Total: **${total}**")
+/* Remove item */
+function removeItem(i) {
+    cart.splice(i, 1);
+    renderCart();
+}
 
-        st.write("### 💳 Payment Method")
-        payment = st.selectbox("Choose payment method:", ["Cash", "Credit Card", "Mobile Pay"])
+/* Checkout email (grouped!) */
+function checkout() {
+    if (cart.length === 0) {
+        alert("Cart is empty!");
+        return;
+    }
 
-        st.write("### 🚚 Delivery Option")
-        delivery = st.radio("Choose delivery:", ["Pickup", "Home Delivery"])
+    const order = cart
+        .map(i => `${i.name} × ${i.qty} — NT$${i.price * i.qty}`)
+        .join("%0A");
 
-        st.button("Checkout")
+    const payment = total >= 500 ? "Cash Before Delivery" : "Cash Only";
 
-# --- DISPLAY ITEMS ---
-show_popup()
+    window.location.href =
+        `mailto:leofoooo132@gmail.com?subject=New Order&body=Order:%0A${order}%0A%0ATotal: NT$${total}%0APayment: ${payment}`;
+}
 
-for category in categories:
-    st.subheader(category)
-    col = st.columns(3)
+/* Render Items (EMPTY) */
+function renderItems() {
+    const container = document.getElementById("itemsContainer");
+    container.innerHTML = "<p>No items available.</p>";
+}
 
-    for i, item in enumerate(items[category]):
-        with col[i % 3]:
-            st.write(f"### {item['name']}")
-            st.write(f"**Price:** ${item['price']}")
-
-            st.button("Add to Cart", key=f"{category}_{i}",
-                      on_click=add_to_cart,
-                      args=(item["name"], item["price"]))
+renderItems();
+</script>
