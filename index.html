@@ -35,11 +35,11 @@ function addToCart(name, price) {
     const qty = parseInt(document.getElementById("qty-" + name).value);
 
     // Check if item is already in cart
-    const existing = cart.find(i => i.name === name);
-    if (existing) {
-        existing.qty += qty;
+    const existingItem = cart.find(i => i.name === name);
+    if (existingItem) {
+        existingItem.qty += qty; // increase quantity
     } else {
-        cart.push({ name, price, qty });
+        cart.push({ name, price, qty }); // add new item
     }
 
     total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
@@ -66,9 +66,9 @@ function renderCart() {
         total >= 500 ? "Cash Before Delivery" : "Cash Only";
 }
 
-/* Remove item */
-function removeItem(i) {
-    cart.splice(i, 1);
+/* Remove Item */
+function removeItem(index) {
+    cart.splice(index, 1);
     total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
     renderCart();
 }
