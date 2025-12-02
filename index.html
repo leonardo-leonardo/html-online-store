@@ -5,7 +5,6 @@
 <title>Windows 7 Store</title>
 
 <style>
-/* --- Windows 7 Aesthetic --- */
 body {
     font-family: Segoe UI, Arial;
     background: linear-gradient(#2a69d0, #1a4c9c);
@@ -13,8 +12,6 @@ body {
     padding: 0;
     color: #fff;
 }
-
-/* Glass / Aero effect */
 .glass {
     backdrop-filter: blur(12px);
     background: rgba(255,255,255,0.18);
@@ -24,8 +21,6 @@ body {
     color: #000;
     box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
-
-/* Search bar */
 #searchBar {
     width: 300px;
     padding: 10px;
@@ -33,16 +28,12 @@ body {
     border: none;
     box-shadow: inset 0 0 4px rgba(0,0,0,0.4);
 }
-
-/* Category */
 select {
     padding: 10px;
     border-radius: 8px;
     border: none;
     box-shadow: inset 0 0 4px rgba(0,0,0,0.4);
 }
-
-/* Item card */
 .item {
     width: 260px;
     background: rgba(255,255,255,0.25);
@@ -58,16 +49,12 @@ select {
 .item:hover {
     transform: scale(1.05);
 }
-
-/* Item image */
 .item img {
     width: 240px;
     height: 180px;
     object-fit: cover;
     border-radius: 8px;
 }
-
-/* Buttons */
 button {
     padding: 8px 12px;
     border-radius: 8px;
@@ -79,13 +66,9 @@ button {
 button:hover {
     background: linear-gradient(#ffffff, #d0e0ff);
 }
-
-/* Cart */
 #cart {
     margin-top: 20px;
 }
-
-/* Windows 7 Taskbar */
 #taskbar {
     position: fixed;
     bottom: 0;
@@ -102,15 +85,12 @@ button:hover {
 </head>
 <body>
 
-<!-- Windows 7 Taskbar -->
 <div id="taskbar">
     🪟 Windows 7 Store — Classic Mode Enabled
 </div>
 
 <div class="glass" style="margin: 20px;">
     <h1>🛒 Windows 7 Mini Store</h1>
-
-    <!-- Search + Category -->
     <input type="text" id="searchBar" placeholder="Search items..." onkeyup="renderItems()">
     <select id="categorySelect" onchange="renderItems()">
         <option value="all">All Categories</option>
@@ -122,10 +102,8 @@ button:hover {
     </select>
 </div>
 
-<!-- Store Inventory -->
 <div id="itemsContainer" class="glass" style="margin: 20px;"></div>
 
-<!-- Cart -->
 <div id="cart" class="glass" style="margin: 20px;">
     <h2>Your Cart</h2>
     <ul id="cartList"></ul>
@@ -134,11 +112,9 @@ button:hover {
     <button onclick="checkout()">Checkout</button>
 </div>
 
-<!-- Windows 7 Ding Sound -->
 <audio id="dingSound" src="https://www.myinstants.com/media/sounds/windows-ding.mp3"></audio>
 
 <script>
-/* Items Data — Fixed Categories + Error */
 const items = [
     {
         name: "Flappy Bird Game",
@@ -169,7 +145,6 @@ const items = [
 let cart = [];
 let total = 0;
 
-/* Render Items */
 function renderItems() {
     const container = document.getElementById("itemsContainer");
     container.innerHTML = "";
@@ -197,7 +172,6 @@ function renderItems() {
         });
 }
 
-/* Add to Cart with Quantity Handling */
 function addToCart(name, price) {
     const qty = parseInt(document.getElementById("qty-" + name).value);
     const existing = cart.find(i => i.name === name);
@@ -214,7 +188,6 @@ function addToCart(name, price) {
     saveCart();
 }
 
-/* Render Cart */
 function renderCart() {
     const list = document.getElementById("cartList");
     list.innerHTML = "";
@@ -231,7 +204,6 @@ function renderCart() {
         total >= 500 ? "Cash Before Delivery" : "Cash Only";
 }
 
-/* Remove item */
 function removeItem(i) {
     total -= cart[i].price * cart[i].qty;
     cart.splice(i, 1);
@@ -239,7 +211,6 @@ function removeItem(i) {
     saveCart();
 }
 
-/* Checkout via mailto */
 function checkout() {
     if (cart.length === 0) {
         alert("Cart is empty!");
@@ -253,4 +224,21 @@ function checkout() {
         `mailto:leofoooo132@gmail.com?subject=New Order&body=Order:%0A${order}%0A%0ATotal: NT$${total}%0APayment: ${payment}`;
 }
 
-/* Persistence with localStorage
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("total", total);
+}
+function loadCart() {
+    const savedCart = localStorage.getItem("cart");
+    const savedTotal = localStorage.getItem("total");
+    if (savedCart) cart = JSON.parse(savedCart);
+    if (savedTotal) total = parseInt(savedTotal);
+    renderCart();
+}
+
+loadCart();
+renderItems();
+</script>
+
+</body>
+</html>
