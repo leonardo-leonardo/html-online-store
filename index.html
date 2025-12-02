@@ -1,100 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Flappy Store</title>
-<style>
-body {
-    background: #4a63a7;
-    font-family: Segoe UI, sans-serif;
-    color: white;
-}
-
-/* Windows 7 item cards */
-.item {
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(8px);
-    padding: 15px;
-    width: 200px;
-    border-radius: 15px;
-    margin: 10px;
-    display: inline-block;
-    text-align: center;
-}
-
-.item img {
-    width: 120px;
-}
-
-button {
-    padding: 8px 15px;
-    border-radius: 10px;
-    background: #e3ecff;
-    border: none;
-    cursor: pointer;
-}
-
-#cartList li {
-    margin: 5px 0;
-    font-size: 18px;
-}
-
-.removeBtn {
-    margin-left: 15px;
-    background: #ffd5d5;
-}
-</style>
-</head>
-<body>
-
-<h1>🟡 Flappy Store</h1>
-
-<!-- Sound -->
-<audio id="dingSound">
-  <source src="https://files.catbox.moe/8n6a3r.mp3" type="audio/mpeg">
-</audio>
-
-<!-- Search -->
-<input id="searchBar" placeholder="Search…" onkeyup="renderItems()" />
-
-<!-- Category -->
-<select id="categorySelect" onchange="renderItems()">
-    <option value="all">All</option>
-    <option value="games">Games</option>
-</select>
-
-<hr>
-
-<!-- Items Container -->
-<div id="itemsContainer"></div>
-
-<hr>
-
-<h2>🛒 Cart</h2>
-<ul id="cartList"></ul>
-
-<p><b>Total: NT$<span id="total">0</span></b></p>
-<p><b>Payment: <span id="paymentRule">Cash Only</span></b></p>
-
-<button onclick="checkout()">Checkout</button>
-
 <script>
-/* ITEMS — only 1 as you requested */
+/* Items Data — ONLY YOUR ITEMS */
 const items = [
     {
-        name: "Flappy Bird",
-        price: 0,
-        category: "games",
-        img: "https://upload.wikimedia.org/wikipedia/en/0/0a/Flappy_Bird_icon.png"
+        name: "Sticky Notes",
+        price: 50,
+        category: "stationery",
+        img: "https://softwaretested.com/wp-content/uploads/2019/05/Sticky-Notes.png"
+    },
+    {
+        name: "Cheap Silent Mouse",
+        price: 150,
+        category: "electronics",
+        img: "https://m.media-amazon.com/images/S/aplus-media/vc/7ecce7bc-e939-4ccd-87ec-570d7cc95f9a.jpg"
     }
 ];
 
-let cart = [];
-let total = 0;
+let cart = []; // each entry: { name, price, qty }
 
 /* Add to Cart */
 function addToCart(name, price) {
     const qty = parseInt(document.getElementById("qty-" + name).value);
 
+    // check if item exists already
     const existing = cart.find(i => i.name === name);
 
     if (existing) {
@@ -107,7 +34,7 @@ function addToCart(name, price) {
     renderCart();
 }
 
-/* Render Cart */
+/* Render Cart (grouped!) */
 function renderCart() {
     const list = document.getElementById("cartList");
     list.innerHTML = "";
@@ -115,43 +42,44 @@ function renderCart() {
     total = 0;
 
     cart.forEach((item, index) => {
-        subtotal = item.price * item.qty;
+        const subtotal = item.price * item.qty;
         total += subtotal;
 
         list.innerHTML += `
             <li>
-                ${item.name} × ${item.qty} — NT$${subtotal}
-                <button class="removeBtn" onclick="removeItem(${index})">❌</button>
+                ${item.name} — NT$${item.price} × ${item.qty}
+                <button onclick="removeItem(${index})">❌</button>
             </li>
         `;
     });
 
     document.getElementById("total").innerText = total;
+
     document.getElementById("paymentRule").innerText =
         total >= 500 ? "Cash Before Delivery" : "Cash Only";
 }
 
-/* Remove */
+/* Remove item */
 function removeItem(i) {
     cart.splice(i, 1);
     renderCart();
 }
 
-/* Checkout email */
+/* Checkout email (grouped!) */
 function checkout() {
-    if (cart.length == 0) {
-        alert("Cart empty!");
+    if (cart.length === 0) {
+        alert("Cart is empty!");
         return;
     }
 
     const order = cart
-      .map(i => `${i.name} × ${i.qty} — NT$${i.price * i.qty}`)
-      .join("%0A");
+        .map(i => `${i.name} × ${i.qty} — NT$${i.price * i.qty}`)
+        .join("%0A");
 
     const payment = total >= 500 ? "Cash Before Delivery" : "Cash Only";
 
     window.location.href =
-      `mailto:leofoooo132@gmail.com?subject=New Order&body=${order}%0A%0ATotal: NT$${total}%0APayment: ${payment}`;
+        `mailto:leofoooo132@gmail.com?subject=New Order&body=Order:%0A${order}%0A%0ATotal: NT$${total}%0APayment: ${payment}`;
 }
 
 /* Render Items */
@@ -162,28 +90,25 @@ function renderItems() {
     const search = document.getElementById("searchBar").value.toLowerCase();
     const category = document.getElementById("categorySelect").value;
 
-    items.filter(item =>
-        (category === "all" || item.category === category) &&
-        item.name.toLowerCase().includes(search)
-    )
-    .forEach(item => {
-        container.innerHTML += `
-            <div class="item">
-                <img src="${item.img}">
-                <h3>${item.name}</h3>
-                <p>Price: NT$${item.price}</p>
-
-                Qty: <input type="number" id="qty-${item.name}" value="1" min="1" style="width:50px;">
-
-                <br><br>
-                <button onclick="addToCart('${item.name}', ${item.price})">Add to Cart</button>
-            </div>
-        `;
-    });
+    items
+        .filter(item =>
+            (category === "all" || item.category === category) &&
+            item.name.toLowerCase().includes(search)
+        )
+        .forEach(item => {
+            container.innerHTML += `
+                <div class="item">
+                    <img src="${item.img}">
+                    <h3>${item.name}</h3>
+                    <p>Price: NT$${item.price}</p>
+                    Quantity: 
+                    <input type="number" id="qty-${item.name}" value="1" min="1" style="width:50px;">
+                    <br><br>
+                    <button onclick="addToCart('${item.name}', ${item.price})">Add to Cart</button>
+                </div>
+            `;
+        });
 }
 
 renderItems();
 </script>
-
-</body>
-</html>
