@@ -15,13 +15,15 @@ const items = [
     }
 ];
 
-let cart = []; // each entry: { name, price, qty }
+let cart = [];   
+let total = 0;   // ✅ FIXED: Now declared correctly
 
 /* Add to Cart */
 function addToCart(name, price) {
-    const qty = parseInt(document.getElementById("qty-" + name).value);
 
-    // check if item exists already
+    const safeId = name.replace(/\s+/g, "_");     // ✅ make safe ID
+    const qty = parseInt(document.getElementById("qty-" + safeId).value);
+
     const existing = cart.find(i => i.name === name);
 
     if (existing) {
@@ -30,7 +32,7 @@ function addToCart(name, price) {
         cart.push({ name, price, qty });
     }
 
-    document.getElementById("dingSound").play();
+    document.getElementById("dingSound")?.play();
     renderCart();
 }
 
@@ -54,7 +56,6 @@ function renderCart() {
     });
 
     document.getElementById("total").innerText = total;
-
     document.getElementById("paymentRule").innerText =
         total >= 500 ? "Cash Before Delivery" : "Cash Only";
 }
@@ -65,7 +66,7 @@ function removeItem(i) {
     renderCart();
 }
 
-/* Checkout email (grouped!) */
+/* Checkout email */
 function checkout() {
     if (cart.length === 0) {
         alert("Cart is empty!");
@@ -96,13 +97,16 @@ function renderItems() {
             item.name.toLowerCase().includes(search)
         )
         .forEach(item => {
+
+            const safeId = item.name.replace(/\s+/g, "_");   // ✅ same safe ID fix
+
             container.innerHTML += `
                 <div class="item">
                     <img src="${item.img}">
                     <h3>${item.name}</h3>
                     <p>Price: NT$${item.price}</p>
                     Quantity: 
-                    <input type="number" id="qty-${item.name}" value="1" min="1" style="width:50px;">
+                    <input type="number" id="qty-${safeId}" value="1" min="1" style="width:50px;">
                     <br><br>
                     <button onclick="addToCart('${item.name}', ${item.price})">Add to Cart</button>
                 </div>
