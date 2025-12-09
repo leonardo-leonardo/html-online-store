@@ -108,24 +108,8 @@ button:hover {
     <h2>Your Cart</h2>
     <ul id="cartList"></ul>
     <p><strong>Total: NT$<span id="total">0</span></strong></p>
-    <p><strong>Payment: <span id="paymentRule">Cash Only(Pay to Leonardo in LTBrown)</span></strong></p>
-
-    <!-- Payment Option Selector -->
-    <label for="paymentOption"><strong>Choose Payment Time:</strong></label>
-    <select id="paymentOption">
-        <option value="before">Before Delivery</option>
-        <option value="after">After Delivery</option>
-    </select>
-
-    <br><br>
+    <p><strong>Payment: <span id="paymentRule">Cash Only</span></strong></p>
     <button onclick="checkout()">Checkout</button>
-</div>
-
-<!-- Feedback Form (hidden by default) -->
-<div id="feedbackForm" class="glass" style="margin:20px; display:none;">
-    <h2>Feedback</h2>
-    <textarea id="feedbackText" rows="4" cols="50" placeholder="Write your feedback here..."></textarea><br><br>
-    <button onclick="submitFeedback()">Submit Feedback</button>
 </div>
 
 <audio id="dingSound" src="https://www.myinstants.com/media/sounds/windows-ding.mp3"></audio>
@@ -234,4 +218,27 @@ function checkout() {
     }
 
     const order = cart.map(i => `${i.name} × ${i.qty} - NT$${i.price * i.qty}`).join("%0A");
-    const paymentBase = total >= 500 ? "Cash Before Delivery(Pay to Leonardo in LTBrown)" : "Cash Only
+    const payment = total >= 500 ? "Cash Before Delivery(Pay to Leonardo in LTBrown)" : "Cash Only(Pay to Leonardo in LTBrown)";
+
+    window.location.href =
+        `mailto:leofoooo132@gmail.com?subject=New Order&body=Order:%0A${order}%0A%0ATotal: NT$${total}%0APayment: ${payment}`;
+}
+
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("total", total);
+}
+function loadCart() {
+    const savedCart = localStorage.getItem("cart");
+    const savedTotal = localStorage.getItem("total");
+    if (savedCart) cart = JSON.parse(savedCart);
+    if (savedTotal) total = parseInt(savedTotal);
+    renderCart();
+}
+
+loadCart();
+renderItems();
+</script>
+
+</body>
+</html>
