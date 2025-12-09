@@ -108,7 +108,13 @@ button:hover {
     <h2>Your Cart</h2>
     <ul id="cartList"></ul>
     <p><strong>Total: NT$<span id="total">0</span></strong></p>
-    <p><strong>Payment: <span id="paymentRule">Cash Only</span></strong></p>
+    <p><strong>Payment: Cash Only (Pay to Leonardo in LTBrown)</strong></p>
+    <label for="paymentOption"><strong>Choose Payment Timing:</strong></label>
+    <select id="paymentOption">
+        <option value="before">Before Delivery</option>
+        <option value="after">After Delivery</option>
+    </select>
+    <br><br>
     <button onclick="checkout()">Checkout</button>
 </div>
 
@@ -200,8 +206,6 @@ function renderCart() {
     });
 
     document.getElementById("total").innerText = total;
-    document.getElementById("paymentRule").innerText =
-        total >= 500 ? "Cash Before Delivery(Pay to Leonardo in LTBrown)" : "Cash Only(Pay to Leonardo in LTBrown)";
 }
 
 function removeItem(i) {
@@ -218,7 +222,10 @@ function checkout() {
     }
 
     const order = cart.map(i => `${i.name} × ${i.qty} - NT$${i.price * i.qty}`).join("%0A");
-    const payment = total >= 500 ? "Cash Before Delivery(Pay to Leonardo in LTBrown)" : "Cash Only(Pay to Leonardo in LTBrown)";
+    const paymentTiming = document.getElementById("paymentOption").value === "before" 
+        ? "Before Delivery" 
+        : "After Delivery";
+    const payment = `Cash Only (Pay to Leonardo in LTBrown) — ${paymentTiming}`;
 
     window.location.href =
         `mailto:leofoooo132@gmail.com?subject=New Order&body=Order:%0A${order}%0A%0ATotal: NT$${total}%0APayment: ${payment}`;
@@ -230,15 +237,3 @@ function saveCart() {
 }
 function loadCart() {
     const savedCart = localStorage.getItem("cart");
-    const savedTotal = localStorage.getItem("total");
-    if (savedCart) cart = JSON.parse(savedCart);
-    if (savedTotal) total = parseInt(savedTotal);
-    renderCart();
-}
-
-loadCart();
-renderItems();
-</script>
-
-</body>
-</html>
